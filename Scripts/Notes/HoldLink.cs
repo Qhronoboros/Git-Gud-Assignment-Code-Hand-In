@@ -1,7 +1,5 @@
 using Godot;
 using System;
-using System.Diagnostics;
-using System.Linq;
 // Maybe allow for more hold notes
 public partial class HoldLink : Note
 {

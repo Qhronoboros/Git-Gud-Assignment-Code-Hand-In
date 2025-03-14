@@ -1,5 +1,4 @@
 using Godot;
-using System;
 
 public partial class Note : Node2D
 {
@@ -30,7 +29,7 @@ public partial class Note : Node2D
 	/// <param name="delta"></param>
 	public void Fall(double delta)
 	{
-		Position = new Vector2(Position.X, Position.Y + FallSpeed * GameManager.instance.NotespeedMultiplier * (float)delta);
+		this.Position = new Vector2(this.Position.X, this.Position.Y + FallSpeed * GameManager.instance.NotespeedMultiplier * (float)delta);
 	}
 
 	/// <summary>

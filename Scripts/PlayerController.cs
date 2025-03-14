@@ -2,10 +2,8 @@ using Godot;
 
 public partial class PlayerController : Area2D
 {
-	// Rectangle that is used for highlighting the area the player could teleport to using portalNotes
-	public NinePatchRect HighlightRect;
-	// Rectangle size of the highlightRect
-	public Vector2 RectSize;
+	// HighlightRect script that is used for highlighting the area the player could teleport to using portalNotes
+	public HighlightRect HighlightRect;
 	
 	// The blank space that's between the rectangle size and sprite of the player
 	public Vector2 RectBlankSpace = new Vector2(30.0f, 30.0f);
@@ -30,13 +28,11 @@ public partial class PlayerController : Area2D
 			QueueFree();
 		}
 		
-		// Setup Highlight Rectangle
-		this.HighlightRect = GetNode<NinePatchRect>("HighlightRect");
-		Control rect = GetNode<Control>("NinePatchRect");
-		this.RectSize = rect.Size;
+		// Get Highlight Rectangle
+		this.HighlightRect = GetNode<HighlightRect>("HighlightRect");
 		
 		// Setup spriteSize for player
-		this.SpriteSize = this.RectSize - this.RectBlankSpace;
+		this.SpriteSize = this.HighlightRect.Size - this.RectBlankSpace;
 	}
 	
 	/// <summary>
@@ -50,7 +46,7 @@ public partial class PlayerController : Area2D
 		float movementAxis = Input.GetAxis("Move Left", "Move Right");
 		this._horizontalVel += movementAxis * chosenSpeed * (float)delta;
 		
-		GlobalPosition = CalculatePlayerPosition(GlobalPosition.X + this._horizontalVel);
+		this.GlobalPosition = CalculatePlayerPosition(this.GlobalPosition.X + this._horizontalVel);
 		
 		// Velocity fall off
 		this._horizontalVel *= 0.5f;
@@ -64,24 +60,6 @@ public partial class PlayerController : Area2D
 	public Vector2 CalculatePlayerPosition(float newPositionX)
 	{
 		return new Vector2((float)Mathf.Clamp(newPositionX, 0.0f + this.SpriteSize.X*0.5f,
-			GetViewport().GetVisibleRect().Size.X - this.SpriteSize.X*0.5f), GlobalPosition.Y);
-	}
-	
-	/// <summary>
-	/// Highlight the area where the player could teleport to when under a portalNote
-	/// </summary>
-	/// <param name="addDistance">The distance between the player and the highlighted area</param>
-	public void HighlightTeleportPosition(float addDistance)
-	{
-		if (addDistance != 0.0f) 
-		{
-			this.HighlightRect.Visible = true;
-			// Set the position of the highlightRect
-			this.HighlightRect.GlobalPosition = CalculatePlayerPosition(GlobalPosition.X + addDistance) - this.RectSize * 0.5f;
-		}
-		else
-		{
-			this.HighlightRect.Visible = false;
-		}
+			GetViewport().GetVisibleRect().Size.X - this.SpriteSize.X*0.5f), this.GlobalPosition.Y);
 	}
 }

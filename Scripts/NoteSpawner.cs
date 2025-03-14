@@ -37,34 +37,6 @@ public partial class NoteSpawner : Node
 		// _spawnTimer.Start();
 	}
 
-	public override void _PhysicsProcess(double delta)
-	{
-		if (GameManager.PlayerController != null)
-			PortalLinkHighlight();
-	}
-	
-	/// <summary>
-	/// Highlights the area the player can teleport to when under a portal note
-	/// </summary>
-	private void PortalLinkHighlight()
-	{
-		if (PortalLinksQueue.Count != 0) 
-		{
-			// Get the first portalLink in the queue
-			PortalLink currentPortalLink = PortalLinksQueue.Peek();
-			
-			// Get the distance between the notes if the player is under one of the portalNotes
-			float addDistance = currentPortalLink.CheckIfPlayerIsUnder();
-
-			// Highlight the teleport position if the player is under one of the portalNotes of the currentPortalLink
-			GameManager.PlayerController.HighlightTeleportPosition(addDistance);
-		}
-		else
-		{	// Hide highlightRect when there are no portalLinks in the queue
-			GameManager.PlayerController.HighlightRect.Visible = false;
-		}
-	}
-
 	/// <summary>
 	/// Gets called by the event OnNewBeat and spawns a note by getting values from NotesSpawnData
 	/// </summary>

@@ -23,7 +23,7 @@ public partial class SFXManager : Node
 			this._sfxDictionary.Add(sfxPlayer.Name, sfxPlayer);
 		}
 		
-		GD.Print($"SFXDictionary Count: {this._sfxDictionary.Count}");
+		// GD.Print($"SFXDictionary Count: {this._sfxDictionary.Count}");
 	}
 	
 	/// <summary>

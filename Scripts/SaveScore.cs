@@ -34,7 +34,7 @@ public partial class SaveScore : Node
 		
 		for (int i = HighscoreData.Highscores.Count - 1; i >= 0; i--)
 		{
-			GD.Print(HighscoreData.Highscores[i]);
+			// GD.Print(HighscoreData.Highscores[i]);
 		}
 	}
 	
