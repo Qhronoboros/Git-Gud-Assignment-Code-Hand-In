@@ -48,7 +48,7 @@ public partial class HoldLink : Note
 		if (!this._missed && IsInstanceValid(this.HoldNoteStart) && DetectIfUnderPlayer(this.HoldNoteStart.GlobalPosition.Y))
 		{
 			this._missed = true;
-			GameManager.instance.OnMiss();
+			GameManager.instance.OnNoteMiss();
 		}
 		
 		PlayerController playerController = GameManager.PlayerController;
@@ -115,11 +115,12 @@ public partial class HoldLink : Note
 		// Add or Remove a point depending if the player is on the path
 		if (this._playerIsOnPath)
 		{
-			GameManager.instance.OnHit(1);
+			// ! Temporary Position
+			GameManager.instance.OnNoteHit(GameManager.PlayerController.GlobalPosition, 1);
 		}
 		else
 		{
-			GameManager.instance.OnMiss();
+			GameManager.instance.OnNoteMiss();
 		}
 	}
 	
@@ -128,19 +129,15 @@ public partial class HoldLink : Note
 	/// </summary>
 	/// <param name="hit">The hit collider</param>
 	/// <param name="noteID">The noteID of the note that has entered the player's collider</param>
-	public void _OnAreaEntered(Area2D hit, int noteID)
+	public void OnAreaEntered(Area2D hit, int noteID)
 	{
-		GameManager.instance.OnHit(1);
+		// Get the correct note that has been hit
+		Area2D note = noteID == 0 ? this.HoldNoteStart : this.HoldNoteEnd;
+		
+		GameManager.instance.OnNoteHit(note.GlobalPosition, 1);
 		GameManager.SFXManager.PlaySound("NoteSound");
 		
-		if (noteID == 0)
-		{
-			this.HoldNoteStart.QueueFree();
-		}
-		else
-		{
-			this.HoldNoteEnd.QueueFree();
-		}
+		note.QueueFree();
 		
 		CheckIfLastHoldNote();
 	}
@@ -149,7 +146,7 @@ public partial class HoldLink : Note
 	/// Called when either note exit out of the screen at the bottom
 	/// </summary>
 	/// <param name="noteID">The noteID of the note that has exited the screen</param>
-	public void _OnScreenExited(int noteID)
+	public void OnScreenExited(int noteID)
 	{
 		if (noteID == 0)
 		{

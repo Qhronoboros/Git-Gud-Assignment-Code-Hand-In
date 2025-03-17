@@ -21,7 +21,7 @@ public partial class PortalLink : Note
 	/// </summary>
 	/// <param name="hit">The hit collider</param>
 	/// <param name="noteID">The noteID of the note that has entered the player's collider</param>
-	public void _OnAreaEntered(Area2D hit, int noteID)
+	public void OnAreaEntered(Area2D hit, int noteID)
 	{
 		PlayerController playerScript = hit as PlayerController;
 		
@@ -29,7 +29,10 @@ public partial class PortalLink : Note
 		float teleportXPos = noteID == 0 ? hit.GlobalPosition.X + this.NotesHorizontalDistance : hit.GlobalPosition.X - this.NotesHorizontalDistance;
 		playerScript.GlobalPosition = playerScript.CalculatePlayerPosition(teleportXPos);
 
-		GameManager.instance.OnHit(2);
+		// Get the correct note that has been hit
+		Area2D note = noteID == 0 ? this.PortalNoteL : this.PortalNoteR;
+
+		GameManager.instance.OnNoteHit(note.GlobalPosition, 2);
 		GameManager.SFXManager.PlaySound("NoteSound");
 		GameManager.NoteSpawner.PortalLinksQueue.Dequeue();
 		QueueFree();
@@ -42,14 +45,14 @@ public partial class PortalLink : Note
 		if (!this._missed && DetectIfUnderPlayer(this.PortalNoteL.GlobalPosition.Y))
 		{
 			this._missed = true;
-			GameManager.instance.OnMiss();
+			GameManager.instance.OnNoteMiss();
 		}
 	}
 
 	/// <summary>
 	/// Called when the notes exit out of the screen at the bottom
 	/// </summary>
-	public override void _OnScreenExited()
+	public override void OnScreenExited()
 	{
 		GameManager.NoteSpawner.PortalLinksQueue.Dequeue();
 		QueueFree();

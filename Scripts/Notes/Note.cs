@@ -19,7 +19,7 @@ public partial class Note : Node2D
 		if (!this._missed && DetectIfUnderPlayer(GlobalPosition.Y))
 		{
 			this._missed = true;
-			GameManager.instance.OnMiss();
+			GameManager.instance.OnNoteMiss();
 		}
 	}
 
@@ -36,17 +36,17 @@ public partial class Note : Node2D
 	/// Called when note enters the player
 	/// </summary>
 	/// <param name="hit">The hit collider</param>
-	public void _OnAreaEntered(Area2D hit)
+	public void OnAreaEntered(Area2D hit)
 	{
 		GameManager.SFXManager.PlaySound("NoteSound");
-		GameManager.instance.OnHit(1);
+		GameManager.instance.OnNoteHit(this.GlobalPosition, 1);
 		QueueFree();
 	}
 	
 	/// <summary>
 	/// Called when note exits out of the screen at the bottom
 	/// </summary>
-	public virtual void _OnScreenExited()
+	public virtual void OnScreenExited()
 	{
 		QueueFree();
 	}
